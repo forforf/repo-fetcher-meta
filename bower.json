@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/forforf/repo-fetcher-meta.git"
   },
-  "description": "Injects metadata into repo objects, if rating informatino is in description",
+  "description": "Fetches repo metadata stored in a .repo-meta.yml file (YAML format)",
   "dependencies":{
     "angular": "latest",
     "underscore": "1.5.2",

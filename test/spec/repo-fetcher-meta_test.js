@@ -344,62 +344,7 @@ describe('RepoFetcherMeta', function(){
           });
         });
 
-        xdescribe('missing _rating_: in description', function(){
-          var fetchedRepos;
-
-          var repos = [
-            { description: 'Awesome' },
-            { description: 'Meh  {"a":"B"}' },
-            { description: 'Unfinished:{"a":"B"}' }
-          ];
-
-          beforeEach(function(){
-            _httpBackend
-              .when('GET', /api.github.com/)
-              .respond(repos);
-
-            repo.initBaseModel('foo', [])
-              .then(function(repos){
-                fetchedRepos = repos;
-              });
-          });
-
-          it('returns rating of null', function(){
-            fetchedRepos = null;
-            _httpBackend.flush();
-            fetchedRepos.forEach(function(repo){
-              expect(repo.__rating).toBe(null);
-            });
-          });
-        });
-
-        xdescribe('missing description (ie Github API change', function(){
-          var fetchedRepos;
-
-          var repos = [
-            { desc: 'Awesome' },
-            { desc: 'Meh  {"a":"B"}' },
-            { desc: 'Unfinished:{"a":"B"}' }
-          ];
-
-          beforeEach(function(){
-            _httpBackend
-              .when('GET', /api.github.com/)
-              .respond(repos);
-
-            repo.initBaseModel('foo', [])
-              .then(function(repos){
-                fetchedRepos = repos;
-              });
-          });
-
-          it('returns rating with ApiMismatchError', function(){
-            fetchedRepos = null;
-            _httpBackend.flush();
-            fetchedRepos.forEach(function(repo){
-              expect(repo.__rating.name).toEqual('ApiMismatchError');
-            });
-          });
+        xdescribe('placeholder if there are any mandatory fields - currently completely freeform', function(){
         });
       });
     });
