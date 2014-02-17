@@ -7,10 +7,19 @@
 
 angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
 
+
+
   .factory('Repo', function ($q, ehttp, GithubRepo, qChain) {
+    //we expect responses to be strings not json
+    //so we remove the default handler that will automatically
+    //try to convert to json
+    ehttp.defaults.transformResponse = function(data){return data};
+
+
     //ToDo: Consider making as a config
     var REPO_META_FILENAME = '.repo-meta.yml';
     var REPO_META_KEYNAME  = '_ff_meta_';
+
 
     // a bit hacky as we're assuming raw.github.com will always work
     function buildRawUrl(fullRepoName, branch, file){
@@ -41,7 +50,7 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
     }
 
     function getHttpData(url){
-      return ehttp.get({url: url})
+      return ehttp.etagGet({url: url})
         .then( function(resp){
           return(resp.data);
         })

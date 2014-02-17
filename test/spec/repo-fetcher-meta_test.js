@@ -301,7 +301,7 @@ describe('RepoFetcherMeta', function(){
                   return [200, '---{ malformed: {   version: 1.0 }', {}]
                 }
                 if (url.match(/repoC/)){
-                  return [200, '---{ malformed: {   version: 2.0 }', {}]
+                  return [200, '{ malformed: {   version: 2.0 }', {}]
                 }
                 return [999, 'test error', {}]
               }
