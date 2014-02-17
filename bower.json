@@ -1,19 +1,20 @@
 {
-  "name": "repo-fetcher-ratings",
-  "main": "repo-fetcher-ratings.js",
+  "name": "repo-fetcher-meta",
+  "main": "repo-fetcher-meta.js",
   "version": "0.0.1",
-  "homepage": "https://github.com/forforf/repo-fetcher-ratings",
+  "homepage": "https://github.com/forforf/repo-fetcher-meta",
   "authors": [
     "David Martin <dmarti21@gmail.com>"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/forforf/repo-fetcher-ratings.git"
+    "url": "git://github.com/forforf/repo-fetcher-meta.git"
   },
-  "description": "Injects ratings into repo objects, if rating informatino is in description",
+  "description": "Injects metadata into repo objects, if rating informatino is in description",
   "dependencies":{
     "angular": "latest",
     "underscore": "1.5.2",
+    "js-yaml": "3.0.1",
     "github-repo-fetcher": "git://github.com/forforf/github-repo-fetcher.git"
   },
   "devDependencies": {

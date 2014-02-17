@@ -1,4 +1,4 @@
-repo-fetcher-ratings
+repo-fetcher-meta
 ===================
 
 Angular module for injecting rating data into repostory data.
@@ -6,4 +6,4 @@ This is a middleware filter and requires [forforf/github-repo-fetcher](https://g
 
 
 ### Current Build Status from Travis-CI
-[![Build Status](https://travis-ci.org/forforf/repo-fetcher-ratings.png)](https://travis-ci.org/forforf/repo-fetcher-ratings)
+[![Build Status](https://travis-ci.org/forforf/repo-fetcher-meta.png)](https://travis-ci.org/forforf/repo-fetcher-meta)

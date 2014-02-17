@@ -1,11 +1,11 @@
 {
-  "name": "repo-fetcher-ratings",
-  "version": "0.0.1",
+  "name": "repo-fetcher-meta",
+  "version": "0.0.2",
   "author": "Dave Martin <dpmartin@yahoo.com>",
-  "description": "Injects rating data into repo object if it exists in the description",
+  "description": "Injects metadata into repo object if a .repo-meta.yml exists",
   "repository": {
     "type": "git",
-    "url": "https://github.com/forforf/repo-fetcher-ratings.git"
+    "url": "https://github.com/forforf/repo-fetcher-meta.git"
   },
   "dependencies": {},
   "devDependencies": {
