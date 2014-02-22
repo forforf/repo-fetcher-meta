@@ -1,0 +1,12 @@
+---
+ratings:
+  stable: 6
+  useful: 7
+  caliber: 7
+  tidy: 8
+  tended: 9
+  tests: 8
+  unique: 6
+progress:
+  "in development":
+    "active development":
