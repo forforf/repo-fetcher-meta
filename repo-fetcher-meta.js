@@ -9,7 +9,7 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
 
 
 
-  .factory('Repo', function ($q, ehttp, GithubRepo, qChain) {
+  .factory('RepoMeta', function ($q, ehttp, GithubRepo, qChain) {
     //we expect responses to be strings not json
     //so we remove the default handler that will automatically
     //try to convert to json

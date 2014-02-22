@@ -18,12 +18,12 @@ describe('RepoFetcherMeta', function(){
     expect(jsyaml).toBeDefined();
   });
 
-  describe('Repo', function(){
+  describe('RepoMeta', function(){
     var repo;
     var _httpBackend;
 
-    beforeEach(inject(function( $injector, $httpBackend, Repo){
-      repo = Repo;
+    beforeEach(inject(function( $injector, $httpBackend, RepoMeta){
+      repo = RepoMeta;
       _httpBackend = $httpBackend;
 
 
