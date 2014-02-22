@@ -13,7 +13,10 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
     //we expect responses to be strings not json
     //so we remove the default handler that will automatically
     //try to convert to json
-    ehttp.defaults.transformResponse = function(data){return data};
+    // PROBLEM - This will transform ALL http requests, not just
+    // this module when injected
+
+    //ehttp.defaults.transformResponse = function(data){return data};
 
 
     //ToDo: Consider making as a config
@@ -49,8 +52,12 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
       });
     }
 
-    function getHttpData(url){
-      return ehttp.etagGet({url: url})
+    function getHttpDataAsString(url){
+      var getOpts = {
+        url: url,
+        transformResponse: function(data){return data}
+      }
+      return ehttp.etagGet(getOpts)
         .then( function(resp){
           return(resp.data);
         })
@@ -72,7 +79,7 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
       var metaUrls = repos.map(function(repo){ return getRawUrl(repo) });
       //ToDo: add throttle mechanism
 
-      return $q.all( metaUrls.map( getHttpData ) )
+      return $q.all( metaUrls.map( getHttpDataAsString ) )
         .then(function(metaYmlStrs){
           var metaObjs = convertYmlCollection(metaYmlStrs);
           repos.forEach(function(repo, idx){
