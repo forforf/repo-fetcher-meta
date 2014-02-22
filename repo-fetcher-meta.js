@@ -26,7 +26,7 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
 
     // a bit hacky as we're assuming raw.github.com will always work
     function buildRawUrl(fullRepoName, branch, file){
-      return 'https://raw.github/com/'
+      return 'https://raw.github.com/'
         + fullRepoName + '/'
         + branch + '/'
         + file
