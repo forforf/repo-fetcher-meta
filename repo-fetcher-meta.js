@@ -102,7 +102,6 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
             respYaml = makeYamlFromObj({
               errorType: 'atobError',
               error: e.toString()
-              }
             });
           }
 
