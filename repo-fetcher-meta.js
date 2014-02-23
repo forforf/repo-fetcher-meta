@@ -9,33 +9,30 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
 
 
 
-  .factory('RepoMeta', function ($q, ehttp, GithubRepo, qChain) {
-    //we expect responses to be strings not json
-    //so we remove the default handler that will automatically
-    //try to convert to json
-    // PROBLEM - This will transform ALL http requests, not just
-    // this module when injected
-
-    //ehttp.defaults.transformResponse = function(data){return data};
-
+  .factory('RepoMeta', function ($q, ehttp, GithubRepo, qChain, $window) {
 
     //ToDo: Consider making as a config
     var REPO_META_FILENAME = '.repo-meta.yml';
     var REPO_META_KEYNAME  = '_ff_meta_';
 
-
-    // a bit hacky as we're assuming raw.github.com will always work
-    function buildRawUrl(fullRepoName, branch, file){
-      return 'https://raw.github.com/'
-        + fullRepoName + '/'
-        + branch + '/'
-        + file
+    function isRequestProblem(repoObj){
+      if (!repoObj){ return {error: 'No repository information provided'}}
+      if (!repoObj.contents_url){ return {error: 'Repository information did not have contents_url property'}}
+      return false;
     }
 
-    function getRawUrl(repoObj){
-      var fullName = repoObj.full_name;
-      var branch = repoObj.default_branch;
-      return buildRawUrl(fullName, branch, REPO_META_FILENAME);
+    function getContentUrl(repoObj){
+
+      var isProb = isRequestProblem(repoObj);
+
+      //returns if there is a problem
+      if (isProb){ return isProb }
+
+      var urlTemplate = repoObj.contents_url;
+      var path = REPO_META_FILENAME;
+      var contentUrl = urlTemplate.replace(/{\+path}/, path);
+
+      return  contentUrl;
     }
 
     function convertYmlCollection(ymlStrs){
@@ -52,14 +49,52 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
       });
     }
 
-    function getHttpDataAsString(url){
-      var getOpts = {
-        url: url,
-        transformResponse: function(data){return data}
+    function isResponseProblem(respData){
+      if(!respData || !respData.type ){
+        return { error: 'Could not parse response'};
       }
+      if(respData.type !== "file"){
+        return { error: REPO_META_FILENAME + ' was not a file, it was' + respData.type.toString()};
+      }
+
+      if (respData.encoding && respData.encoding !== 'base64'){
+        return { error: 'Unknown encoding for ' + REPO_META_FILENAME + ': ' + respData.encoding.toString() };
+      }
+
+      if (!respData.content){
+
+        return { error: 'Could not find encoded content in ' + REPO_META_FILENAME };
+      }
+
+      return false
+
+    }
+
+    function makeYamlFromObj(jsObj){
+      return '---\n' + jsyaml.safeDump(jsObj, {skipInvalid: true});
+    }
+
+    function getHttpDataAsString(url){
+
+      if(typeof url !== 'string'){
+        if(url.error){ return makeYamlFromObj(url); }
+        var errObj = {error: 'Unknown URL type: ' + url.toString() };
+        return makeYamlFromObj(errObj);
+      }
+
+      var getOpts = {
+        url: url
+        //transformResponse: function(data){return data}
+      }
+
+      //ToDo: have consistent error handling. Catch the error in the promise or no?
       return ehttp.etagGet(getOpts)
         .then( function(resp){
-          return(resp.data);
+          var respData = resp.data;
+          var isProblem = isResponseProblem(respData);
+          if (isProblem){ return makeYamlFromObj(isProblem); }
+          var respYaml = $window.atob(respData.content);
+          return(respYaml);
         })
 
         // We don't want to quit fetching other repos
@@ -70,13 +105,13 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
           //so it's safe and parseable by Yaml
           //add optional yaml separator too ('---')
           var errObj = {error: err};
-          var errYaml = '---\n' + jsyaml.safeDump(errObj, {skipInvalid: true});
-          return(errYaml);
+          return makeYamlFromObj(errObj);
         });
     }
 
     function insertRepoMeta(repos){
-      var metaUrls = repos.map(function(repo){ return getRawUrl(repo) });
+      //var contentUrls= repos.map( getContentUrl )
+      var metaUrls = repos.map(function(repo){ return getContentUrl(repo) });
       //ToDo: add throttle mechanism
 
       return $q.all( metaUrls.map( getHttpDataAsString ) )
