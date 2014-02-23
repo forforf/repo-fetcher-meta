@@ -94,6 +94,7 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
           var isProblem = isResponseProblem(respData);
           if (isProblem){ return makeYamlFromObj(isProblem); }
           var respYaml;
+          console.log('respData content', respData.content);
           try {
             respYaml = $window.atob(respData.content);
           } catch(e) {
