@@ -93,11 +93,11 @@ angular.module('RepoFetcherMeta', ['GithubRepoFetcher', 'AngularEtag'])
           var respData = resp.data;
           var isProblem = isResponseProblem(respData);
           if (isProblem){ return makeYamlFromObj(isProblem); }
-          var trimmedContent = respData.content.replace(/(\r\n|\n|\r)/gm,"");
+          var trimmedContent = respData.content.replace(/\s/g,'');
           var respYaml;
-          console.log('respData content', respData.content);
+          console.log('trimmed content', trimmedContent);
           try {
-            respYaml = $window.atob(respData.content);
+            respYaml = $window.atob(trimmedContent);
           } catch(e) {
             respYaml = makeYamlFromObj({
               errorType: 'atobError',
